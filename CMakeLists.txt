@@ -9,19 +9,32 @@ set(CMAKE_CXX_STANDARD 17)
 add_subdirectory(external/glfw)
 # add_subdirectory(external/glad)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
-# add_executable(gears examples/gears.cpp)
 
-target_include_directories(${PROJECT_NAME} PRIVATE
+# target_include_directories(${PROJECT_NAME} PRIVATE
+#     ${CMAKE_SOURCE_DIR}/src
+#     ${CMAKE_SOURCE_DIR}/include
+#     # ${CMAKE_SOURCE_DIR}/external/glad/include
+#     ${CMAKE_SOURCE_DIR}/external/glfw/include
+# )
+
+# target_link_directories(${PROJECT_NAME} PRIVATE
+#     # ${CMAKE_SOURCE_DIR}/external/glad/src
+#     ${CMAKE_SOURCE_DIR}/external/glfw/src
+# )
+
+link_libraries( glfw opengl32)
+
+add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(gears examples/gears.cpp)
+
+include_directories(
     ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/include
     # ${CMAKE_SOURCE_DIR}/external/glad/include
     ${CMAKE_SOURCE_DIR}/external/glfw/include
 )
 
-link_directories(${PROJECT_NAME} PRIVATE
+link_directories(
     # ${CMAKE_SOURCE_DIR}/external/glad/src
     ${CMAKE_SOURCE_DIR}/external/glfw/src
 )
-
-target_link_libraries(${PROJECT_NAME} glfw opengl32)

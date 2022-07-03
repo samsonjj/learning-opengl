@@ -1,0 +1,1 @@
+out\build\Debug\%1.exe
