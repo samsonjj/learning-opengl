@@ -24,11 +24,13 @@ add_subdirectory(external/glfw)
 
 link_libraries( glfw opengl32)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
-add_executable(gears examples/gears.cpp)
+file(GLOB SOURCES "src/*.cpp")
+
+add_executable(${PROJECT_NAME} ${SOURCES})
+# add_executable(gears examples/gears.cpp)
 
 include_directories(
-    ${CMAKE_SOURCE_DIR}/src
+    # ${CMAKE_SOURCE_DIR}/src
     ${CMAKE_SOURCE_DIR}/include
     # ${CMAKE_SOURCE_DIR}/external/glad/include
     ${CMAKE_SOURCE_DIR}/external/glfw/include
@@ -38,3 +40,5 @@ link_directories(
     # ${CMAKE_SOURCE_DIR}/external/glad/src
     ${CMAKE_SOURCE_DIR}/external/glfw/src
 )
+
+add_executable(sphere examples/sphere.cpp)

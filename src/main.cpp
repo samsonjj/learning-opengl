@@ -1,97 +1,30 @@
-#include <iostream>
-#include <string>
 #include <GLFW/glfw3.h>
+#include <iostream>
 
-static void
-cube(GLfloat x, GLfloat y, GLfloat z, GLfloat r);
+#include "gfx.hpp"
+#include "util.hpp"
 
-static void
-draw() {
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+int main() {
+	Gfx gfx(300, 300);
 
-	cube(5.0, 5.0, 0.0, 9.0);
-}
+	Clock clock;
 
-static void
-cube(GLfloat x, GLfloat y, GLfloat z, GLfloat r)
-{
-	glShadeModel(GL_FLAT);
-	GLfloat half_r = r / 2.f;
+	int frames = 0;
+	auto startTime = util::current_time();
+	auto last_time = util::current_time();
 
-	// TODO: What does this do?
-	glNormal3f(0.f, 0.f, 1.f);
-
-	glBegin(GL_QUADS);
-	glColor3f(0.0, 1.0, 0.0);
-	glVertex3f(x - half_r, y - half_r, z);
-	glColor3f(1.0, 0.0, 0.0);
-	glVertex3f(x - half_r, y + half_r, z);
-	glColor3f(0.0, 0.0, 1.0);
-	glVertex3f(x + half_r, y + half_r, z);
-	glVertex3f(x + half_r, y - half_r, z);
-
-	glEnd();
-
-}
-
-/* change view angle, exit upon ESC */
-void key( GLFWwindow* window, int k, int s, int action, int mods )
-{
-  if( action != GLFW_PRESS ) return;
-
-  switch (k) {
-  case GLFW_KEY_ESCAPE:
-    glfwSetWindowShouldClose(window, GLFW_TRUE);
-    break;
-  default:
-    return;
-  }
-}
-
-int main(int argc, char *argv[])
-{
-    GLFWwindow* window;
-    int width, height;
-
-    if( !glfwInit() )
+    while( !gfx.shouldClose() )
     {
-        fprintf( stderr, "Failed to initialize GLFW\n" );
-        exit( EXIT_FAILURE );
+		double time_passed = util::get_the_millis(util::current_time() - startTime) / 1000.f;
+		double fps = frames / time_passed;
+
+		std::cout << "fps: " << clock.fps << "\n";
+
+		clock.tick(1 / 60.f);
+		gfx.pollEvents();
+		gfx.drawRect(Rect{ 2, 2, 5, 5 }, Color{ 1.f, 1.f, 1.f });
+		gfx.flip();
+
+		frames++;
     }
-
-    window = glfwCreateWindow( 300, 300, "Gears", NULL, NULL );
-    if (!window)
-    {
-        fprintf( stderr, "Failed to open GLFW window\n" );
-        glfwTerminate();
-        exit( EXIT_FAILURE );
-    }
-
-    glfwMakeContextCurrent(window);
-    glfwSwapInterval( 1 );
-
-    glfwGetFramebufferSize(window, &width, &height);
-
-	glOrtho(0.0, 10.0, 0.0, 10.0, -1.0, 1.0);
-
-    // Parse command-line options
-    // Main loop
-    while( !glfwWindowShouldClose(window) )
-    {
-		draw();
-
-		glfwSetKeyCallback(window, key);
-
-        // Swap buffers
-        glfwSwapBuffers(window);
-        glfwPollEvents();
-    }
-
-    // Terminate GLFW
-    glfwTerminate();
-
-    // Exit program
-    exit( EXIT_SUCCESS );
 }
-
